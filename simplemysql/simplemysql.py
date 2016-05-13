@@ -303,10 +303,9 @@ class SimpleMysql:
 
         return self.query(sql, where[1] if where and len(where) > 1 else None)
 
+    def __enter__(self):
+        return self
 
-def __enter__(self):
-    return self
 
-
-def __exit__(self, type, value, traceback):
-    self.end()
+    def __exit__(self, type, value, traceback):
+        self.end()
