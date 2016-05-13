@@ -83,7 +83,7 @@ class SimpleMysql:
         row = None
         if result:
             Row = namedtuple('Row', [f[0] for f in cur.description])
-            row = Row(*result)
+            row = Row(**result) if isinstance(result, dict) else Row(*result)
 
         return row
 
@@ -105,7 +105,10 @@ class SimpleMysql:
         rows = None
         if result:
             Row = namedtuple('Row', [f[0] for f in cur.description])
-            rows = [Row(*r) for r in result]
+            rows = [
+                Row(**r) if isinstance(r, dict) else Row(*r)
+                for r in result
+            ]
 
         return rows
 
