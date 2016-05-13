@@ -291,17 +291,12 @@ class SimpleMysql:
             if len(order) > 1: sql += ' ' + order[1]
 
             # limit
-        if
+        if limit:
+            sql += ' LIMIT %s' % limit[0]
+            if len(limit) > 1:
+                sql += ', %s' % limit[1]
 
-    limit:
-    sql += ' LIMIT %s' % limit[0]
-
-    if len(limit) > 1:
-
-
-sql += ', %s' % limit[1]
-
-return self.query(sql, where[1] if where and len(where) > 1 else None)
+        return self.query(sql, where[1] if where and len(where) > 1 else None)
 
 
 def __enter__(self):
