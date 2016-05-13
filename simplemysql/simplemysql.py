@@ -25,6 +25,8 @@ import MySQLdb
 from MySQLdb import cursors
 from collections import namedtuple
 
+FETCH_SIZE = 1000
+
 
 class SimpleMysql:
     conn = None
@@ -209,10 +211,10 @@ class SimpleMysql:
         side cursor
         """
         cur = self.query(sql, params)
-        row = cur.fetchone()
-        while row:
-            yield row
-            row = cur.fetchone()
+        rows = cur.fetchmany(FETCH_SIZE)
+        while rows and len(rows):
+            for row in rows: yield row
+            rows = cur.fetchmany(FETCH_SIZE)
 
     def commit(self):
         """Commit a transaction (transactional engines like InnoDB require
